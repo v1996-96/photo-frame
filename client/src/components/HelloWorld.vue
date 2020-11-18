@@ -1,5 +1,5 @@
 <template>
-    <div>kek</div>
+    <div>kek lol</div>
 </template>
 
 <script>
