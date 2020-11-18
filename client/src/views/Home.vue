@@ -1,17 +1,26 @@
 <template>
     <div>
-        <img alt="Vue logo" src="../assets/logo.png" />
-        <HelloWorld msg="Welcome to Your Vue.js App" />
+        <button @click="handleClickAuthorize">Authorize</button>
+        <button @click="handleClickCheck">Check</button>
     </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue';
+import { api } from '@/api';
 
 export default {
     name: 'Home',
-    components: {
-        HelloWorld,
+    methods: {
+        async handleClickAuthorize() {
+            const result = await api.auth();
+
+            console.log(result);
+        },
+        async handleClickCheck() {
+            const result = await api.authCheck();
+
+            console.log(result);
+        },
     },
 };
 </script>
