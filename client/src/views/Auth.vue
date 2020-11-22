@@ -10,16 +10,16 @@
             <v-list-item v-for="account in accounts" :key="account.id">
                 <v-list-item-avatar>
                     <v-avatar color="primary" size="56">
-                        <img :src="account.avatar_url" />
+                        <img :src="account.avatarUrl" />
                     </v-avatar>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title>{{ account.real_name }}</v-list-item-title>
+                    <v-list-item-title>{{ account.realName }}</v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-action>
-                    <v-btn depressed @click="logout(account.app_id)">Выйти</v-btn>
+                    <v-btn depressed @click="logout(account.userId)">Выйти</v-btn>
                 </v-list-item-action>
             </v-list-item>
 

@@ -10,15 +10,15 @@ let localDeviceCode;
 router.post('/code', async (req, res, next) => {
     try {
         const response = await apiService.requestAuthCodes();
-        const { device_code, expires_in, interval, user_code, verification_url } = response.data;
+        const { deviceCode, expiresIn, interval, userCode, verificationUrl } = response.data;
 
-        localDeviceCode = device_code;
+        localDeviceCode = deviceCode;
         res.json({
             result: {
                 interval,
-                expiresAt: new Date().getTime() + expires_in * 1000,
-                userCode: user_code,
-                verificationUrl: verification_url,
+                expiresAt: new Date().getTime() + expiresIn * 1000,
+                userCode,
+                verificationUrl,
             },
         });
     } catch (error) {
@@ -35,23 +35,20 @@ router.post('/check', async (req, res, next) => {
 
         try {
             const tokenResponse = await apiService.requestAuthToken(localDeviceCode);
-            const userResponse = await apiService.requestUserInfo(tokenResponse.data.access_token);
+            const userResponse = await apiService.requestUserInfo(tokenResponse.data.accessToken);
 
             const newAccount = {
                 ...userResponse.data,
-                app_id: nanoid(),
+                userId: nanoid(),
                 credentials: tokenResponse.data,
             };
 
-            const { default_avatar_id } = userResponse.data;
-            newAccount.avatar_url = `https://avatars.yandex.net/get-yapic/${default_avatar_id}/islands-retina-50`;
+            const { defaultAvatarId } = userResponse.data;
+            newAccount.avatarUrl = `https://avatars.yandex.net/get-yapic/${defaultAvatarId}/islands-retina-50`;
 
             const settings = await settingsService.readSettings();
             await settingsService.writeSettings(
-                {
-                    ...settings,
-                    accounts: [...settings.accounts, newAccount],
-                },
+                { ...settings, accounts: [...settings.accounts, newAccount] },
                 true,
             );
 
@@ -81,7 +78,7 @@ router.post('/logout', async (req, res, next) => {
     try {
         const settings = await settingsService.readSettings();
 
-        const newAccounts = settings.accounts.filter(({ app_id }) => app_id !== req.body.app_id);
+        const newAccounts = settings.accounts.filter(({ userId }) => userId !== req.body.userId);
         await settingsService.writeSettings({ ...settings, accounts: newAccounts }, true);
 
         res.json({ result: { success: true } });

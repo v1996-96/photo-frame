@@ -1,14 +1,17 @@
 const axios = require('axios');
+const axiosDefaults = require('axios/lib/defaults');
 const qs = require('qs');
-const {
-    CLIENT_ID,
-    CLIENT_SECRET,
-    DEVICE_ID,
-    DEVICE_NAME,
-    SCOPE,
-    YANDEX_OAUTH_HOST,
-    YANDEX_LOGIN_HOST,
-} = require('../config');
+const camelcaseKeys = require('camelcase-keys');
+const R = require('ramda');
+const { SCOPE, YANDEX_OAUTH_HOST, YANDEX_LOGIN_HOST } = require('../config');
+const { CLIENT_ID, CLIENT_SECRET, DEVICE_ID, DEVICE_NAME } = process.env;
+
+const defaultOptions = {
+    transformResponse: [
+        ...axiosDefaults.transformResponse,
+        (data) => (R.is(Object, data) && camelcaseKeys(data)) || data,
+    ],
+};
 
 const requestAuthCodes = () => {
     return axios.post(
@@ -19,6 +22,7 @@ const requestAuthCodes = () => {
             device_name: DEVICE_NAME,
             scope: SCOPE,
         }),
+        defaultOptions,
     );
 };
 
@@ -31,11 +35,13 @@ const requestAuthToken = (deviceCode) => {
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
         }),
+        defaultOptions,
     );
 };
 
 const requestUserInfo = (token) => {
     return axios.get(`${YANDEX_LOGIN_HOST}/info`, {
+        ...defaultOptions,
         params: { format: 'json' },
         headers: { Authorization: `OAuth ${token}` },
     });
