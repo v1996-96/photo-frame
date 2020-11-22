@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer app mini-variant permanent>
         <v-list>
-            <v-list-item link>
+            <v-list-item to="/">
                 <v-list-item-icon>
                     <v-icon>mdi-home</v-icon>
                 </v-list-item-icon>
@@ -54,7 +54,7 @@
 
         <template v-slot:append>
             <v-list>
-                <v-list-item link>
+                <v-list-item to="settings">
                     <v-list-item-icon>
                         <v-icon>mdi-cog</v-icon>
                     </v-list-item-icon>

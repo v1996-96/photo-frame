@@ -1,6 +1,6 @@
 <template>
     <v-container class="pt-4">
-        <h2 class="text-h2 mb-2">Авторизация</h2>
+        <h2 class="text-h2 mb-2">Аккаунты</h2>
 
         <p class="text-subtitle-1 mb-6">
             Вы можете войти сразу в несколько аккаунтов для доступа к функционалу
