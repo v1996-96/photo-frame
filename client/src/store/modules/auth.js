@@ -51,6 +51,10 @@ const actions = {
             commit('setAccounts', result);
         });
     },
+    async logout({ dispatch }, userId) {
+        await api.auth.logout(userId);
+        await dispatch('loadAccounts');
+    },
 };
 
 export const NAMESPACE = 'auth';

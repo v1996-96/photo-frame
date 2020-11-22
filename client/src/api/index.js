@@ -9,5 +9,6 @@ export const api = {
         code: () => client.post('/auth/code'),
         check: () => client.post('/auth/check'),
         accounts: () => client.get('/auth/accounts'),
+        logout: app_id => client.post('/auth/logout', { app_id }),
     },
 };

@@ -19,7 +19,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                    <v-btn depressed>Выйти</v-btn>
+                    <v-btn depressed @click="logout(account.app_id)">Выйти</v-btn>
                 </v-list-item-action>
             </v-list-item>
 
@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         ...authHelpers.mapMutations(['clearCode']),
-        ...authHelpers.mapActions(['getCode', 'checkAuth', 'loadAccounts']),
+        ...authHelpers.mapActions(['getCode', 'checkAuth', 'loadAccounts', 'logout']),
         async handleClickGetCode() {
             await this.getCode();
             this.startPolling();

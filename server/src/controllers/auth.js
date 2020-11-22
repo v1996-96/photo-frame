@@ -76,4 +76,18 @@ router.get('/accounts', async (req, res, next) => {
     }
 });
 
+// Выйти из профиля
+router.post('/logout', async (req, res, next) => {
+    try {
+        const settings = await settingsService.readSettings();
+
+        const newAccounts = settings.accounts.filter(({ app_id }) => app_id !== req.body.app_id);
+        await settingsService.writeSettings({ ...settings, accounts: newAccounts }, true);
+
+        res.json({ result: { success: true } });
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = router;
