@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const { requestAuthCodes, requestAuthToken } = require('./disk-api');
+const { requestAuthCodes, requestAuthToken } = require('./services/disk-api');
 
 let localDeviceCode = null;
 

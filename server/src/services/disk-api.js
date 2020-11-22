@@ -7,7 +7,7 @@ const {
     DEVICE_NAME,
     SCOPE,
     YANDEX_DISK_HOST,
-} = require('./config');
+} = require('../config');
 
 const requestAuthCodes = () => {
     return axios.post(
