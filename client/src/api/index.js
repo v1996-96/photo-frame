@@ -5,6 +5,9 @@ const client = axios.create({
 });
 
 export const api = {
-    auth: () => client.post('/auth'),
-    authCheck: () => client.post('/auth/check'),
+    auth: {
+        code: () => client.post('/auth/code'),
+        check: () => client.post('/auth/check'),
+        accounts: () => client.get('/auth/accounts'),
+    },
 };

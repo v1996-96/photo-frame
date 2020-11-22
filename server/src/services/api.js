@@ -6,12 +6,13 @@ const {
     DEVICE_ID,
     DEVICE_NAME,
     SCOPE,
-    YANDEX_DISK_HOST,
+    YANDEX_OAUTH_HOST,
+    YANDEX_LOGIN_HOST,
 } = require('../config');
 
 const requestAuthCodes = () => {
     return axios.post(
-        `${YANDEX_DISK_HOST}/device/code`,
+        `${YANDEX_OAUTH_HOST}/device/code`,
         qs.stringify({
             client_id: CLIENT_ID,
             device_id: DEVICE_ID,
@@ -23,7 +24,7 @@ const requestAuthCodes = () => {
 
 const requestAuthToken = (deviceCode) => {
     return axios.post(
-        `${YANDEX_DISK_HOST}/token`,
+        `${YANDEX_OAUTH_HOST}/token`,
         qs.stringify({
             grant_type: 'device_code',
             code: deviceCode,
@@ -33,7 +34,15 @@ const requestAuthToken = (deviceCode) => {
     );
 };
 
+const requestUserInfo = (token) => {
+    return axios.get(`${YANDEX_LOGIN_HOST}/info`, {
+        params: { format: 'json' },
+        headers: { Authorization: `OAuth ${token}` },
+    });
+};
+
 module.exports = {
     requestAuthCodes,
     requestAuthToken,
+    requestUserInfo,
 };
