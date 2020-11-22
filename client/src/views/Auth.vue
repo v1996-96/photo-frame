@@ -6,7 +6,7 @@
             Вы можете войти сразу в несколько аккаунтов для доступа к функционалу
         </p>
 
-        <v-list v-if="isAuthorized || !authorization.userCode" class="mb-4">
+        <v-list v-if="isAuthorized || !authorization.userCode" outlined class="mb-4">
             <v-list-item v-for="account in accounts" :key="account.id">
                 <v-list-item-avatar>
                     <v-avatar color="primary" size="56">
