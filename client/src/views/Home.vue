@@ -4,7 +4,7 @@
 
         <v-row>
             <v-col cols="4">
-                <card-link to="/settings">
+                <card-link to="/gallery">
                     <template #icon>
                         <v-icon size="40">mdi-image-multiple</v-icon>
                     </template>
@@ -13,7 +13,7 @@
             </v-col>
 
             <v-col cols="4">
-                <card-link to="/settings">
+                <card-link>
                     <template #icon>
                         <v-icon size="40">mdi-newspaper</v-icon>
                     </template>
@@ -22,7 +22,7 @@
             </v-col>
 
             <v-col cols="4">
-                <card-link to="/settings">
+                <card-link>
                     <template #icon>
                         <v-icon size="40">mdi-white-balance-sunny</v-icon>
                     </template>
@@ -31,7 +31,7 @@
             </v-col>
 
             <v-col cols="4">
-                <card-link to="/settings">
+                <card-link>
                     <template #icon>
                         <v-icon size="40">mdi-playlist-check</v-icon>
                     </template>

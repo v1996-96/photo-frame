@@ -11,7 +11,17 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item link>
+            <v-list-item to="/gallery">
+                <v-list-item-icon>
+                    <v-icon>mdi-image-multiple</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>Галерея</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
                 <v-list-item-icon>
                     <v-icon>mdi-newspaper</v-icon>
                 </v-list-item-icon>
@@ -21,17 +31,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item link>
-                <v-list-item-icon>
-                    <v-icon>mdi-image-multiple</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                    <v-list-item-title>Фото</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item link>
+            <v-list-item>
                 <v-list-item-icon>
                     <v-icon>mdi-white-balance-sunny</v-icon>
                 </v-list-item-icon>
@@ -41,7 +41,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item link>
+            <v-list-item>
                 <v-list-item-icon>
                     <v-icon>mdi-playlist-check</v-icon>
                 </v-list-item-icon>

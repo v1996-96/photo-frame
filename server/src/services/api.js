@@ -3,7 +3,7 @@ const axiosDefaults = require('axios/lib/defaults');
 const qs = require('qs');
 const camelcaseKeys = require('camelcase-keys');
 const R = require('ramda');
-const { SCOPE, YANDEX_OAUTH_HOST, YANDEX_LOGIN_HOST } = require('../config');
+const { SCOPE, YANDEX_OAUTH_HOST, YANDEX_LOGIN_HOST, YANDEX_CLOUD_HOST } = require('../config');
 const { CLIENT_ID, CLIENT_SECRET, DEVICE_ID, DEVICE_NAME } = process.env;
 
 const defaultOptions = {
@@ -12,6 +12,10 @@ const defaultOptions = {
         (data) => (R.is(Object, data) && camelcaseKeys(data)) || data,
     ],
 };
+
+const getHeaders = (token) => ({
+    Authorization: `OAuth ${token}`,
+});
 
 const requestAuthCodes = () => {
     return axios.post(
@@ -43,7 +47,15 @@ const requestUserInfo = (token) => {
     return axios.get(`${YANDEX_LOGIN_HOST}/info`, {
         ...defaultOptions,
         params: { format: 'json' },
-        headers: { Authorization: `OAuth ${token}` },
+        headers: getHeaders(token),
+    });
+};
+
+const requestDiskMeta = ({ params, token }) => {
+    return axios.get(`${YANDEX_CLOUD_HOST}/disk/resources`, {
+        ...defaultOptions,
+        params,
+        headers: getHeaders(token),
     });
 };
 
@@ -51,4 +63,5 @@ module.exports = {
     requestAuthCodes,
     requestAuthToken,
     requestUserInfo,
+    requestDiskMeta,
 };

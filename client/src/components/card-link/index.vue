@@ -19,7 +19,7 @@ export default {
     name: 'CardLink',
     props: {
         to: {
-            type: Object,
+            type: [String, Object],
             required: false,
         },
     },

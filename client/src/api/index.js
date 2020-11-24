@@ -11,4 +11,7 @@ export const api = {
         accounts: () => client.get('/auth/accounts'),
         logout: userId => client.post('/auth/logout', { userId }),
     },
+    gallery: {
+        structure: () => client.get('gallery/structure'),
+    },
 };
