@@ -12,6 +12,7 @@ export const api = {
         logout: userId => client.post('/auth/logout', { userId }),
     },
     gallery: {
-        structure: () => client.get('gallery/structure'),
+        structure: ({ userId, limit, offset, path }) =>
+            client.get('gallery/structure', { params: { userId, limit, offset, path } }),
     },
 };

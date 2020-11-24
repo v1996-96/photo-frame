@@ -54,8 +54,5 @@ export default {
             return getWelcomeMsg();
         },
     },
-    methods: {
-        handleClick() {},
-    },
 };
 </script>

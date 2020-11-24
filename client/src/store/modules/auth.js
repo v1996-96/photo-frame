@@ -1,7 +1,10 @@
-import { api } from '@/api';
 import { createNamespacedHelpers } from 'vuex';
+import { api } from '@/api';
+import { dataStates } from '@/config/data-state';
+import { withDataState } from '@/utils/store';
 
 const state = {
+    accountsDataState: dataStates.notAsked,
     accounts: [],
     authorization: {
         interval: 5,
@@ -15,6 +18,9 @@ const getters = {
     isAuthorized(state) {
         return Boolean(state.accounts.length);
     },
+    areAccountsLoaded(state) {
+        return state.accountsDataState === dataStates.loaded;
+    },
 };
 
 const mutations = {
@@ -26,6 +32,9 @@ const mutations = {
     },
     setAccounts(state, accounts) {
         state.accounts = accounts;
+    },
+    setAccountsDataState(state, dataState) {
+        state.accountsDataState = dataState;
     },
 };
 
@@ -46,11 +55,11 @@ const actions = {
 
         return false;
     },
-    loadAccounts({ commit }) {
+    loadAccounts: withDataState('setAccountsDataState')(({ commit }) => {
         return api.auth.accounts().then(({ data: { result } }) => {
             commit('setAccounts', result);
         });
-    },
+    }),
     async logout({ dispatch }, userId) {
         await api.auth.logout(userId);
         await dispatch('loadAccounts');
