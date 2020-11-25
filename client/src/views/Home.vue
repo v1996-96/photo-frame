@@ -44,7 +44,7 @@
 
 <script>
 import { getWelcomeMsg } from '@/utils/date';
-import CardLink from '@/components/card-link';
+import CardLink from '@/components/CardLink';
 
 export default {
     name: 'Home',

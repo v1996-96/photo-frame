@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import CardLink from '@/components/card-link';
+import CardLink from '@/components/CardLink';
 
 export default {
     name: 'Settings',

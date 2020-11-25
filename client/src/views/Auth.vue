@@ -70,7 +70,7 @@ export default {
     },
     methods: {
         ...authHelpers.mapMutations(['clearCode']),
-        ...authHelpers.mapActions(['getCode', 'checkAuth', 'loadAccounts', 'logout']),
+        ...authHelpers.mapActions(['getCode', 'checkAuth', 'logout']),
         async handleClickGetCode() {
             await this.getCode();
             this.startPolling();
@@ -102,9 +102,6 @@ export default {
             this.pollingInstance.setTimeout(timeout);
             this.pollingInstance.start();
         },
-    },
-    created() {
-        this.loadAccounts();
     },
     beforeDestroy() {
         if (this.pollingInstance) {

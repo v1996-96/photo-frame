@@ -1,7 +1,7 @@
 const axios = require('axios');
 const axiosDefaults = require('axios/lib/defaults');
 const qs = require('qs');
-const camelcaseKeys = require('camelcase-keys');
+const humps = require('humps');
 const R = require('ramda');
 const { SCOPE, YANDEX_OAUTH_HOST, YANDEX_LOGIN_HOST, YANDEX_CLOUD_HOST } = require('../config');
 const { CLIENT_ID, CLIENT_SECRET, DEVICE_ID, DEVICE_NAME } = process.env;
@@ -9,7 +9,7 @@ const { CLIENT_ID, CLIENT_SECRET, DEVICE_ID, DEVICE_NAME } = process.env;
 const defaultOptions = {
     transformResponse: [
         ...axiosDefaults.transformResponse,
-        (data) => (R.is(Object, data) && camelcaseKeys(data)) || data,
+        (data) => (R.is(Object, data) && humps.camelizeKeys(data)) || data,
     ],
 };
 
