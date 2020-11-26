@@ -17,5 +17,7 @@ export const api = {
         getSelectedPaths: () => client.get('gallery/selected/get'),
         setSelectedPaths: ({ selectedPaths }) =>
             client.post('gallery/selected/set', { selectedPaths }),
+        loadPreviews: () => client.post('gallery/previews/load'),
+        getPreviewsList: () => client.get('gallery/previews/list/get'),
     },
 };
