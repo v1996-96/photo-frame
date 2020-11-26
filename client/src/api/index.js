@@ -9,10 +9,13 @@ export const api = {
         code: () => client.post('/auth/code'),
         check: () => client.post('/auth/check'),
         accounts: () => client.get('/auth/accounts'),
-        logout: userId => client.post('/auth/logout', { userId }),
+        logout: accountId => client.post('/auth/logout', { accountId }),
     },
     gallery: {
-        structure: ({ userId, limit, offset, path }) =>
-            client.get('gallery/structure', { params: { userId, limit, offset, path } }),
+        structure: ({ accountId, limit, offset, path }) =>
+            client.get('gallery/structure', { params: { accountId, limit, offset, path } }),
+        getSelectedPaths: () => client.get('gallery/selected/get'),
+        setSelectedPaths: ({ selectedPaths }) =>
+            client.post('gallery/selected/set', { selectedPaths }),
     },
 };

@@ -21,6 +21,9 @@ const getters = {
     areAccountsLoaded(state) {
         return state.accountsDataState === dataStates.loaded;
     },
+    getAccountById: state => targetAccountId => {
+        return state.accounts.find(({ accountId }) => accountId === targetAccountId) || {};
+    },
 };
 
 const mutations = {
@@ -60,8 +63,8 @@ const actions = {
             commit('setAccounts', result);
         });
     }),
-    async logout({ dispatch }, userId) {
-        await api.auth.logout(userId);
+    async logout({ dispatch }, accountId) {
+        await api.auth.logout(accountId);
         await dispatch('loadAccounts');
     },
 };

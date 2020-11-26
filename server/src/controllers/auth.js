@@ -39,15 +39,15 @@ router.post('/check', async (req, res, next) => {
 
             const newAccount = {
                 ...userResponse.data,
-                userId: nanoid(),
+                accountId: nanoid(),
                 credentials: tokenResponse.data,
             };
 
             const { defaultAvatarId } = userResponse.data;
             newAccount.avatarUrl = `https://avatars.yandex.net/get-yapic/${defaultAvatarId}/islands-retina-50`;
 
-            const settings = await settingsService.readSettings();
-            await settingsService.writeSettings(
+            const settings = await settingsService.read();
+            await settingsService.write(
                 { ...settings, accounts: [...settings.accounts, newAccount] },
                 true,
             );
@@ -65,7 +65,7 @@ router.post('/check', async (req, res, next) => {
 // Информация об авторизованных учетках
 router.get('/accounts', async (req, res, next) => {
     try {
-        const settings = await settingsService.readSettings();
+        const settings = await settingsService.read();
 
         res.json({ result: settings.accounts });
     } catch (error) {
@@ -76,9 +76,11 @@ router.get('/accounts', async (req, res, next) => {
 // Выйти из профиля
 router.post('/logout', async (req, res, next) => {
     try {
-        const settings = await settingsService.readSettings();
+        const settings = await settingsService.read();
 
-        const newAccounts = settings.accounts.filter(({ userId }) => userId !== req.body.userId);
+        const newAccounts = settings.accounts.filter(
+            ({ accountId }) => accountId !== req.body.accountId,
+        );
         await settingsService.writeSettings({ ...settings, accounts: newAccounts }, true);
 
         res.json({ result: { success: true } });

@@ -15,7 +15,8 @@
         "humps": "^2.0.1",
         "nanoid": "^3.1.18",
         "qs": "^6.9.4",
-        "ramda": "^0.27.1"
+        "ramda": "^0.27.1",
+        "shelljs": "^0.8.4"
     },
     "devDependencies": {
         "dotenv": "^8.2.0",

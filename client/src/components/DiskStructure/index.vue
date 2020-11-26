@@ -49,7 +49,7 @@ export default {
             if (isSelected) {
                 newSelectedPaths = [...this.selectedPaths, item.path];
             } else {
-                newSelectedPaths = this.selected.filter(path => path !== item.path);
+                newSelectedPaths = this.selectedPaths.filter(path => path !== item.path);
             }
 
             this.$emit('change', newSelectedPaths);
@@ -63,7 +63,7 @@ export default {
         },
         async fetchDirs(path = '/') {
             const response = await api.gallery.structure({
-                userId: this.account.userId,
+                accountId: this.account.accountId,
                 limit: 10000,
                 offset: 0,
                 path,

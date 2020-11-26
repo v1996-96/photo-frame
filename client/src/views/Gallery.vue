@@ -2,28 +2,58 @@
     <v-container class="pt-4">
         <h2 class="text-h2 mb-10">Галерея</h2>
 
-        <v-btn color="accent" x-large class="mb-10 mr-4">Показать фоточки</v-btn>
-        <v-btn color="info" x-large class="mb-10 mr-4">Настроить</v-btn>
-        <v-btn x-large class="mb-10">Сбросить кэш</v-btn>
+        <div v-if="!showSettings" class="mb-10">
+            <v-btn color="accent" x-large class="mr-4">Показать фоточки</v-btn>
+            <v-btn color="info" x-large class="mr-4" @click="showSettings = !showSettings">
+                Настроить
+            </v-btn>
+            <v-btn x-large>Сбросить кэш</v-btn>
+        </div>
 
-        <v-tabs v-if="false" v-model="selectedAccount">
-            <v-tab v-for="account in accounts" :key="account.id">
-                <v-avatar color="primary" size="30" class="mr-3">
-                    <img :src="account.avatarUrl" />
-                </v-avatar>
-                {{ account.realName }}
-            </v-tab>
-        </v-tabs>
+        <div v-if="showSettings">
+            <v-tabs v-model="selectedAccount">
+                <v-tab>
+                    Выбранные папки
+                </v-tab>
+                <v-tab v-for="account in accounts" :key="account.id">
+                    <v-avatar color="primary" size="30" class="mr-3">
+                        <img :src="account.avatarUrl" />
+                    </v-avatar>
+                    {{ account.realName }}
+                </v-tab>
+            </v-tabs>
 
-        <v-tabs-items v-if="false" v-model="selectedAccount">
-            <v-tab-item v-for="account in accounts" :key="account.id">
-                <disk-structure v-model="selectedPathsByAccount[account.id]" :account="account" />
-            </v-tab-item>
-        </v-tabs-items>
+            <v-tabs-items v-model="selectedAccount">
+                <v-tab-item>
+                    <template v-for="accountId in Object.keys(selectedPaths)">
+                        <v-list
+                            v-if="selectedPaths[accountId] && selectedPaths[accountId].length"
+                            :key="accountId"
+                            subheader
+                            dense
+                        >
+                            <v-subheader>{{ getAccountById(accountId).realName }}</v-subheader>
+
+                            <v-list-item v-for="path in selectedPaths[accountId]" :key="path">
+                                <v-list-item-content>{{ path }}</v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+                    </template>
+                </v-tab-item>
+                <v-tab-item v-for="account in accounts" :key="account.accountId">
+                    <disk-structure
+                        :selected-paths="selectedPaths[account.accountId]"
+                        :account="account"
+                        @change="saveSelectedPaths($event, account.accountId)"
+                    />
+                </v-tab-item>
+            </v-tabs-items>
+        </div>
     </v-container>
 </template>
 
 <script>
+import { api } from '@/api';
 import { helpers as authHelpers } from '@/store/modules/auth';
 import DiskStructure from '@/components/DiskStructure';
 
@@ -31,20 +61,27 @@ export default {
     name: 'Gallery',
     components: { DiskStructure },
     data: () => ({
+        showSettings: false,
         selectedAccount: null,
-        selectedPathsByAccount: {},
+        selectedPaths: {},
     }),
     computed: {
         ...authHelpers.mapState(['accounts']),
-        ...authHelpers.mapGetters(['isAuthorized']),
+        ...authHelpers.mapGetters(['isAuthorized', 'getAccountById']),
     },
-    watch: {
-        selectedPathsByAccount: {
-            handler: value => {
-                console.log(value);
-            },
-            deep: true,
+    methods: {
+        async saveSelectedPaths(paths, accountId) {
+            this.$set(this.selectedPaths, accountId, paths);
+
+            await api.gallery.setSelectedPaths({ selectedPaths: this.selectedPaths });
         },
+        async loadSelectedPaths() {
+            const response = await api.gallery.getSelectedPaths();
+            this.selectedPaths = response.data?.result?.selectedPaths || {};
+        },
+    },
+    created() {
+        this.loadSelectedPaths();
     },
 };
 </script>
