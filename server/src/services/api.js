@@ -59,9 +59,17 @@ const requestDiskMeta = ({ params, token }) => {
     });
 };
 
+const requestImage = ({ url, token }) => {
+    return axios.get(url, {
+        responseType: 'arraybuffer',
+        headers: getHeaders(token),
+    });
+};
+
 module.exports = {
     requestAuthCodes,
     requestAuthToken,
     requestUserInfo,
     requestDiskMeta,
+    requestImage,
 };

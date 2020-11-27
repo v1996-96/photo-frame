@@ -1,5 +1,6 @@
 const express = require('express');
-const { pathOr } = require('ramda');
+const { pathOr, pick } = require('ramda');
+const { nanoid } = require('nanoid');
 const router = express.Router();
 const apiService = require('../services/api');
 const settingsService = require('../services/settings');
@@ -13,7 +14,8 @@ async function loadPhotoPreviews() {
     const settings = await settingsService.read();
     const { selectedPaths = {} } = settings[appName] || {};
 
-    const collectedPreviews = {};
+    const imagesBySelectedPaths = {};
+    let images = {};
 
     for (const accountId of Object.keys(selectedPaths)) {
         const account = settings.accounts.find((account) => account.accountId === accountId);
@@ -23,8 +25,7 @@ async function loadPhotoPreviews() {
         }
 
         const token = account.credentials.accessToken;
-
-        collectedPreviews[accountId] = {};
+        imagesBySelectedPaths[accountId] = {};
 
         for (const path of selectedPaths[accountId]) {
             const response = await apiService.requestDiskMeta({
@@ -34,16 +35,23 @@ async function loadPhotoPreviews() {
                     limit: 10000,
                     offset: 0,
                     preview_crop: true,
-                    preview_size: '1024x',
+                    preview_size: 'XXL',
                 },
             });
 
             const files = pathOr([], ['data', 'embedded', 'items'], response);
+            const filteredFiles = files.filter(({ mediaType }) => mediaType === 'image');
+            const imagesMap = filteredFiles.reduce((acc, file) => {
+                const imageId = nanoid();
+                return { ...acc, [imageId]: { ...file, accountId, imageId } };
+            }, {});
 
-            collectedPreviews[accountId][path] = {
+            imagesBySelectedPaths[accountId][path] = {
                 createdAt: new Date().getTime(),
-                files: files.filter(({ mediaType }) => mediaType === 'image'),
+                imagesIds: Object.keys(imagesMap),
             };
+
+            images = { ...images, ...imagesMap };
         }
     }
 
@@ -51,7 +59,8 @@ async function loadPhotoPreviews() {
         ...settings,
         [appName]: {
             ...settings[appName],
-            previews: collectedPreviews,
+            imagesBySelectedPaths,
+            images,
         },
     });
 
@@ -129,19 +138,49 @@ router.post('/previews/load', (req, res) => {
 router.get('/previews/list/get', async (req, res, next) => {
     try {
         const settings = await settingsService.read();
-        const { previews = {} } = settings[appName] || {};
+        const { images = {} } = settings[appName] || {};
 
-        const previewsList = Object.keys(previews).reduce((acc, accountId) => {
-            const byPaths = Object.keys(previews[accountId]).reduce((acc, path) => {
-                return acc.concat(previews[accountId][path].files);
-            }, []);
-
-            return acc.concat(byPaths);
-        }, []);
-
-        res.json({ result: { previewsList } });
+        res.json({ result: { images: Object.values(images) } });
     } catch (error) {
         next(error);
+    }
+});
+
+router.get('/previews/image', async (req, res, next) => {
+    try {
+        const imageId = req.query.imageId;
+        const accountId = req.query.accountId;
+
+        const settings = await settingsService.read();
+        const account = settings.accounts.find((account) => account.accountId === accountId);
+        const images = settings[appName].images || {};
+
+        if (!account) {
+            throw new Error('Неизвестный пользователь');
+        }
+
+        const image = images[imageId];
+
+        if (!image) {
+            throw new Error('Неизвестная картинка');
+        }
+
+        const token = account.credentials.accessToken;
+        const response = await apiService.requestImage({ url: image.preview, token });
+
+        const imageBuffer = Buffer.from(response.data, 'binary');
+
+        const headers = pick(
+            ['content-type', 'content-length', 'cache-control', 'date', 'expires', 'last-modified'],
+            response.headers,
+        );
+
+        res.writeHead(200, headers);
+
+        res.end(imageBuffer);
+    } catch (error) {
+        console.log(error);
+        res.status(400).end();
     }
 });
 

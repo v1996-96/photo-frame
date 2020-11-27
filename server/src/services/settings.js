@@ -5,9 +5,7 @@ const settingsFilePath = path.join(process.cwd(), process.env.SETTINGS_PATH, 'se
 
 const defaultSettings = {
     accounts: [],
-    apps: {
-        gallery: {},
-    },
+    gallery: {},
 };
 
 module.exports = new SettingsAdapter(settingsFilePath, defaultSettings);
