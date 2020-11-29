@@ -12,12 +12,7 @@
             <v-btn x-large @click="loadPreviews">Сбросить кэш</v-btn>
         </div>
 
-        <v-dialog v-model="showCarousel" fullscreen>
-            <v-card>
-                <gallery-carousel />
-            </v-card>
-        </v-dialog>
-
+        <gallery-carousel v-model="showCarousel" />
         <images-list v-if="!showSettings && !showCarousel" />
         <gallery-settings v-if="showSettings" />
     </v-container>

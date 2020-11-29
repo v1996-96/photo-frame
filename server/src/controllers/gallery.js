@@ -129,14 +129,12 @@ router.get('/previews/image', async (req, res, next) => {
         }
 
         const token = account.credentials.accessToken;
-        console.time();
         const response = await apiService.requestImage({ url: image.preview, token });
-        console.timeEnd();
 
         const imageBuffer = Buffer.from(response.data, 'binary');
 
         const headers = pick(
-            ['content-type', 'content-length', 'cache-control', 'date', 'expires', 'last-modified'],
+            ['content-type', 'content-length', 'cache-control', 'date', 'last-modified'],
             response.headers,
         );
 
