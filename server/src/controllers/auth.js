@@ -2,7 +2,7 @@ const express = require('express');
 const { nanoid } = require('nanoid');
 const router = express.Router();
 const apiService = require('../services/api');
-const settingsService = require('../services/settings');
+const { Account } = require('../models/account');
 
 let localDeviceCode;
 
@@ -37,20 +37,14 @@ router.post('/check', async (req, res, next) => {
             const tokenResponse = await apiService.requestAuthToken(localDeviceCode);
             const userResponse = await apiService.requestUserInfo(tokenResponse.data.accessToken);
 
-            const newAccount = {
+            const newAccount = new Account({
                 ...userResponse.data,
                 accountId: nanoid(),
                 credentials: tokenResponse.data,
-            };
+                avatarUrl: `https://avatars.yandex.net/get-yapic/${userResponse.data.defaultAvatarId}/islands-retina-50`,
+            });
 
-            const { defaultAvatarId } = userResponse.data;
-            newAccount.avatarUrl = `https://avatars.yandex.net/get-yapic/${defaultAvatarId}/islands-retina-50`;
-
-            const settings = await settingsService.read();
-            await settingsService.write(
-                { ...settings, accounts: [...settings.accounts, newAccount] },
-                true,
-            );
+            await newAccount.save();
 
             localDeviceCode = null;
             res.json({ result: { success: true } });
@@ -65,9 +59,9 @@ router.post('/check', async (req, res, next) => {
 // Информация об авторизованных учетках
 router.get('/accounts', async (req, res, next) => {
     try {
-        const settings = await settingsService.read();
+        const accounts = await Account.find({}).lean();
 
-        res.json({ result: settings.accounts });
+        res.json({ result: accounts });
     } catch (error) {
         next(error);
     }
@@ -76,12 +70,7 @@ router.get('/accounts', async (req, res, next) => {
 // Выйти из профиля
 router.post('/logout', async (req, res, next) => {
     try {
-        const settings = await settingsService.read();
-
-        const newAccounts = settings.accounts.filter(
-            ({ accountId }) => accountId !== req.body.accountId,
-        );
-        await settingsService.writeSettings({ ...settings, accounts: newAccounts }, true);
+        await Account.remove({ _id: req.body._id });
 
         res.json({ result: { success: true } });
     } catch (error) {

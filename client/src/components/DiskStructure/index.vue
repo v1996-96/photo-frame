@@ -63,7 +63,7 @@ export default {
         },
         async fetchDirs(path = '/') {
             const response = await api.gallery.structure({
-                accountId: this.account.accountId,
+                accountId: this.account._id,
                 limit: 10000,
                 offset: 0,
                 path,

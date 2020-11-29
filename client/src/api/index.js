@@ -9,7 +9,7 @@ export const api = {
         code: () => client.post('/auth/code'),
         check: () => client.post('/auth/check'),
         accounts: () => client.get('/auth/accounts'),
-        logout: accountId => client.post('/auth/logout', { accountId }),
+        logout: ({ _id }) => client.post('/auth/logout', { _id }),
     },
     gallery: {
         structure: ({ accountId, limit, offset, path }) =>

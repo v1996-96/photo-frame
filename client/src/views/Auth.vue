@@ -19,7 +19,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                    <v-btn depressed @click="logout(account.accountId)">Выйти</v-btn>
+                    <v-btn depressed @click="logout(account)">Выйти</v-btn>
                 </v-list-item-action>
             </v-list-item>
 

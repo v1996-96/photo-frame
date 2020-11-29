@@ -22,7 +22,7 @@ const getters = {
         return state.accountsDataState === dataStates.loaded;
     },
     getAccountById: state => targetAccountId => {
-        return state.accounts.find(({ accountId }) => accountId === targetAccountId) || {};
+        return state.accounts.find(({ _id }) => _id === targetAccountId) || {};
     },
 };
 
@@ -63,8 +63,8 @@ const actions = {
             commit('setAccounts', result);
         });
     }),
-    async logout({ dispatch }, accountId) {
-        await api.auth.logout(accountId);
+    async logout({ dispatch }, account) {
+        await api.auth.logout(account);
         await dispatch('loadAccounts');
     },
 };

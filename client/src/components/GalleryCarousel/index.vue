@@ -1,6 +1,6 @@
 <template>
     <v-carousel v-if="images.length" hide-delimiters continuous height="600">
-        <v-carousel-item v-for="image in images" :key="image.imageId" :src="image.proxySrc" />
+        <v-carousel-item v-for="image in images" :key="image._id" :src="image.proxySrc" />
     </v-carousel>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 
             this.images = images.map(image => ({
                 ...image,
-                proxySrc: `/api/gallery/previews/image?imageId=${image.imageId}&accountId=${image.accountId}`,
+                proxySrc: `/api/gallery/previews/image?imageId=${image._id}&accountId=${image.account}`,
             }));
         },
     },

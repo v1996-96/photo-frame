@@ -1,68 +1,45 @@
 const express = require('express');
 const { pathOr, pick } = require('ramda');
-const { nanoid } = require('nanoid');
 const router = express.Router();
 const apiService = require('../services/api');
-const settingsService = require('../services/settings');
+const { Account } = require('../models/account');
+const { DiskPath } = require('../models/disk-path');
+const { DiskImage } = require('../models/disk-image');
 
-const appName = 'gallery';
 let isLoadingPreviews = false;
 
 async function loadPhotoPreviews() {
     isLoadingPreviews = true;
 
-    const settings = await settingsService.read();
-    const { selectedPaths = {} } = settings[appName] || {};
+    const selectedPaths = await DiskPath.find({}).populate('account').exec();
 
-    const imagesBySelectedPaths = {};
-    let images = {};
+    for (const selectedPath of selectedPaths) {
+        const path = selectedPath.path;
+        const token = selectedPath.account.credentials.accessToken;
 
-    for (const accountId of Object.keys(selectedPaths)) {
-        const account = settings.accounts.find((account) => account.accountId === accountId);
+        const response = await apiService.requestDiskMeta({
+            token,
+            params: {
+                path,
+                limit: 10000,
+                offset: 0,
+                preview_crop: true,
+                preview_size: 'XXL',
+            },
+        });
 
-        if (!account) {
-            continue;
-        }
+        selectedPath.updatedAt = new Date();
+        const files = pathOr([], ['data', 'embedded', 'items'], response);
+        const filteredFiles = files.filter(({ mediaType }) => mediaType === 'image');
+        const connectedFiles = filteredFiles.map((file) => ({
+            ...file,
+            diskPath: selectedPath._id,
+            account: selectedPath.account._id,
+        }));
 
-        const token = account.credentials.accessToken;
-        imagesBySelectedPaths[accountId] = {};
-
-        for (const path of selectedPaths[accountId]) {
-            const response = await apiService.requestDiskMeta({
-                token,
-                params: {
-                    path,
-                    limit: 10000,
-                    offset: 0,
-                    preview_crop: true,
-                    preview_size: 'XXL',
-                },
-            });
-
-            const files = pathOr([], ['data', 'embedded', 'items'], response);
-            const filteredFiles = files.filter(({ mediaType }) => mediaType === 'image');
-            const imagesMap = filteredFiles.reduce((acc, file) => {
-                const imageId = nanoid();
-                return { ...acc, [imageId]: { ...file, accountId, imageId } };
-            }, {});
-
-            imagesBySelectedPaths[accountId][path] = {
-                createdAt: new Date().getTime(),
-                imagesIds: Object.keys(imagesMap),
-            };
-
-            images = { ...images, ...imagesMap };
-        }
+        await DiskImage.insertMany(connectedFiles);
+        await selectedPath.save();
     }
-
-    await settingsService.write({
-        ...settings,
-        [appName]: {
-            ...settings[appName],
-            imagesBySelectedPaths,
-            images,
-        },
-    });
 
     isLoadingPreviews = false;
 }
@@ -70,13 +47,11 @@ async function loadPhotoPreviews() {
 // Запрашиваем и выводим коды
 router.get('/structure', async (req, res, next) => {
     try {
-        const accountId = req.query.accountId;
         const path = req.query.path || '/';
         const limit = req.query.limit || 100;
         const offset = req.query.offset || 0;
 
-        const settings = await settingsService.read();
-        const account = settings.accounts.find((account) => account.accountId === accountId);
+        const account = await Account.findById(req.query.accountId).lean();
 
         if (!account) {
             throw new Error('Неизвестный пользователь');
@@ -96,8 +71,7 @@ router.get('/structure', async (req, res, next) => {
 
 router.get('/selected/get', async (req, res, next) => {
     try {
-        const settings = await settingsService.read();
-        const { selectedPaths = {} } = settings[appName] || {};
+        const selectedPaths = await DiskPath.find({}).lean();
 
         res.json({ result: { selectedPaths } });
     } catch (error) {
@@ -107,16 +81,8 @@ router.get('/selected/get', async (req, res, next) => {
 
 router.post('/selected/set', async (req, res, next) => {
     try {
-        const settings = await settingsService.read();
-        const newSettings = {
-            ...settings,
-            [appName]: {
-                ...settings[appName],
-                selectedPaths: req.body.selectedPaths || {},
-            },
-        };
-
-        await settingsService.write(newSettings);
+        await DiskPath.deleteMany({});
+        await DiskPath.insertMany(req.body.selectedPaths);
 
         res.json({ result: { success: true } });
     } catch (error) {
@@ -137,10 +103,9 @@ router.post('/previews/load', (req, res) => {
 
 router.get('/previews/list/get', async (req, res, next) => {
     try {
-        const settings = await settingsService.read();
-        const { images = {} } = settings[appName] || {};
+        const images = await DiskImage.find({}).lean();
 
-        res.json({ result: { images: Object.values(images) } });
+        res.json({ result: { images } });
     } catch (error) {
         next(error);
     }
@@ -151,22 +116,22 @@ router.get('/previews/image', async (req, res, next) => {
         const imageId = req.query.imageId;
         const accountId = req.query.accountId;
 
-        const settings = await settingsService.read();
-        const account = settings.accounts.find((account) => account.accountId === accountId);
-        const images = settings[appName].images || {};
+        const account = await Account.findById(accountId).lean();
 
         if (!account) {
             throw new Error('Неизвестный пользователь');
         }
 
-        const image = images[imageId];
+        const image = await DiskImage.findById(imageId).lean();
 
         if (!image) {
             throw new Error('Неизвестная картинка');
         }
 
         const token = account.credentials.accessToken;
+        console.time();
         const response = await apiService.requestImage({ url: image.preview, token });
+        console.timeEnd();
 
         const imageBuffer = Buffer.from(response.data, 'binary');
 
