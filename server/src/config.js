@@ -1,3 +1,6 @@
+// https://forismatic.com/ru/api/
+const FORISMATIC_HOST = 'http://api.forismatic.com/api/1.0/';
+
 const YANDEX_OAUTH_HOST = 'https://oauth.yandex.ru';
 const YANDEX_LOGIN_HOST = 'https://login.yandex.ru';
 const YANDEX_CLOUD_HOST = 'https://cloud-api.yandex.net/v1';
@@ -18,6 +21,7 @@ const SCOPE = [
 ];
 
 module.exports = {
+    FORISMATIC_HOST,
     YANDEX_OAUTH_HOST,
     YANDEX_LOGIN_HOST,
     YANDEX_CLOUD_HOST,

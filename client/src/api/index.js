@@ -6,10 +6,10 @@ const client = axios.create({
 
 export const api = {
     auth: {
-        code: () => client.post('/auth/code'),
-        check: () => client.post('/auth/check'),
-        accounts: () => client.get('/auth/accounts'),
-        logout: ({ _id }) => client.post('/auth/logout', { _id }),
+        code: () => client.post('auth/code'),
+        check: () => client.post('auth/check'),
+        accounts: () => client.get('auth/accounts'),
+        logout: ({ _id }) => client.post('auth/logout', { _id }),
     },
     gallery: {
         structure: ({ accountId, limit, offset, path }) =>
@@ -19,5 +19,8 @@ export const api = {
             client.post('gallery/selected/set', { selectedPaths }),
         loadPreviews: () => client.post('gallery/previews/load'),
         getPreviewsList: () => client.get('gallery/previews/list/get'),
+    },
+    forismatic: {
+        get: () => client.get('forismatic/get'),
     },
 };

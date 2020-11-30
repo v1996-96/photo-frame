@@ -7,10 +7,16 @@
                 hide-delimiters
                 continuous
                 height="600"
+                :interval="interval"
                 :cycle="shouldCycle"
                 :show-arrows="false"
             >
-                <v-carousel-item v-for="image in images" :key="image._id" :src="image.proxySrc" />
+                <v-carousel-item
+                    v-for="image in images"
+                    :key="image._id"
+                    :src="image.proxySrc"
+                    contain
+                />
             </v-carousel>
 
             <img
@@ -59,6 +65,7 @@ export default {
         showControls: false,
         shouldCycle: true,
         activeImage: 0,
+        interval: 30 * 60 * 1000,
         images: [],
     }),
     methods: {

@@ -21,7 +21,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item>
+            <v-list-item to="/news">
                 <v-list-item-icon>
                     <v-icon>mdi-newspaper</v-icon>
                 </v-list-item-icon>
@@ -31,7 +31,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item>
+            <v-list-item to="/weather">
                 <v-list-item-icon>
                     <v-icon>mdi-white-balance-sunny</v-icon>
                 </v-list-item-icon>
@@ -41,7 +41,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item>
+            <v-list-item to="/todos">
                 <v-list-item-icon>
                     <v-icon>mdi-playlist-check</v-icon>
                 </v-list-item-icon>

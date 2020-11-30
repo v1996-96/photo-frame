@@ -8,6 +8,7 @@ const compression = require('compression');
 const errorHandler = require('./middlewares/error-handler');
 const auth = require('./controllers/auth');
 const gallery = require('./controllers/gallery');
+const forismatic = require('./controllers/forismatic');
 
 if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     // Fork workers
@@ -33,6 +34,7 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     app.use(bodyParser.json());
     app.use('/auth', auth);
     app.use('/gallery', gallery);
+    app.use('/forismatic', forismatic);
     app.use(errorHandler);
 
     // Start server

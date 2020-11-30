@@ -1,7 +1,7 @@
 const express = require('express');
 const { pathOr, pick } = require('ramda');
 const router = express.Router();
-const apiService = require('../services/api');
+const apiService = require('../services/yandex-api');
 const { Account } = require('../models/account');
 const { DiskPath } = require('../models/disk-path');
 const { DiskImage } = require('../models/disk-image');
@@ -10,6 +10,8 @@ let isLoadingPreviews = false;
 
 async function loadPhotoPreviews() {
     isLoadingPreviews = true;
+
+    await DiskImage.deleteMany({});
 
     const selectedPaths = await DiskPath.find({}).populate('account').exec();
 

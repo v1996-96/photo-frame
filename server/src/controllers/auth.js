@@ -1,7 +1,7 @@
 const express = require('express');
 const { nanoid } = require('nanoid');
 const router = express.Router();
-const apiService = require('../services/api');
+const apiService = require('../services/yandex-api');
 const { Account } = require('../models/account');
 
 let localDeviceCode;

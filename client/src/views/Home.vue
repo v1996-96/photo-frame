@@ -2,57 +2,37 @@
     <v-container class="pt-4">
         <h2 class="text-h2 mb-10">{{ welcomeMsg }}</h2>
 
-        <v-row>
-            <v-col cols="4">
-                <card-link to="/gallery">
-                    <template #icon>
-                        <v-icon size="40">mdi-image-multiple</v-icon>
-                    </template>
-                    <span class="text-body-1">Галерея</span>
-                </card-link>
-            </v-col>
-
-            <v-col cols="4">
-                <card-link>
-                    <template #icon>
-                        <v-icon size="40">mdi-newspaper</v-icon>
-                    </template>
-                    <span class="text-body-1">Новости</span>
-                </card-link>
-            </v-col>
-
-            <v-col cols="4">
-                <card-link>
-                    <template #icon>
-                        <v-icon size="40">mdi-white-balance-sunny</v-icon>
-                    </template>
-                    <span class="text-body-1">Погода</span>
-                </card-link>
-            </v-col>
-
-            <v-col cols="4">
-                <card-link>
-                    <template #icon>
-                        <v-icon size="40">mdi-playlist-check</v-icon>
-                    </template>
-                    <span class="text-body-1">Напоминалки</span>
-                </card-link>
-            </v-col>
-        </v-row>
+        <v-card v-if="Boolean(quote)" @click="loadQuote">
+            <v-card-text>
+                <div class="text-h5">{{ quote.quoteText }}</div>
+                <div v-if="quote.quoteAuthor" class="mt-3">{{ quote.quoteAuthor }}</div>
+            </v-card-text>
+        </v-card>
     </v-container>
 </template>
 
 <script>
+import { api } from '@/api';
 import { getWelcomeMsg } from '@/utils/date';
-import CardLink from '@/components/CardLink';
 
 export default {
     name: 'Home',
-    components: { CardLink },
+    data: () => ({
+        quote: null,
+    }),
     computed: {
         welcomeMsg() {
             return getWelcomeMsg();
         },
+    },
+    methods: {
+        async loadQuote() {
+            const response = await api.forismatic.get();
+            this.quote = response.data?.result;
+        },
+    },
+    created() {
+        this.loadQuote();
     },
 };
 </script>
