@@ -20,6 +20,7 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     });
 } else {
     // Setup express server
+    let server;
     const app = express();
     const port = process.env.PORT || 3000;
 
@@ -38,7 +39,7 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     mongoose.connection.once('open', () => {
         app.locals.db = mongoose.connection;
 
-        app.listen(port, () => {
+        server = app.listen(port, () => {
             console.log(`Photo frame app listening at http://localhost:${port}`);
         });
     });
@@ -46,5 +47,9 @@ if (cluster.isMaster && process.env.NODE_ENV === 'production') {
     // Close connection on process end
     process.on('SIGINT', function () {
         mongoose.connection.close();
+
+        if (server) {
+            server.close();
+        }
     });
 }

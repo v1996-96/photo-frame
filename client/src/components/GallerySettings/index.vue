@@ -14,6 +14,14 @@
 
         <v-tabs-items v-model="selectedTab">
             <v-tab-item>
+                <template v-if="!selectedPaths.length">
+                    <v-card>
+                        <v-card-text>
+                            Выберите папки с фото
+                        </v-card-text>
+                    </v-card>
+                </template>
+
                 <template v-for="accountId in Object.keys(groupedPaths)">
                     <v-list
                         v-if="groupedPaths[accountId] && groupedPaths[accountId].length"
