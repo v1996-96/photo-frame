@@ -144,7 +144,6 @@ router.get('/previews/image', async (req, res, next) => {
 
         res.end(imageBuffer);
     } catch (error) {
-        console.log(error);
         res.status(400).end();
     }
 });
