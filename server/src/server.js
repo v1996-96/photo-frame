@@ -32,8 +32,9 @@ mongoose.connection.once('open', () => {
 
     server = app.listen(port, () => {
         console.log(`Photo frame app listening at http://localhost:${port}`);
-        process.send('ready');
     });
+
+    require('./raspi');
 });
 
 // Close connection on process end
