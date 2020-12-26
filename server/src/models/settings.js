@@ -15,4 +15,8 @@ module.exports = {
     SettingsNamespace,
     SettingsSchema,
     Settings: model(SettingsNamespace, SettingsSchema),
+
+    loadSettiingsLean: (update = {}) => {
+        return Settings.findOneAndUpdate({}, update, { upsert: true }).lean();
+    },
 };

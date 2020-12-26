@@ -11,7 +11,7 @@ module.exports = {
     MIN_BACKLIGHT: 0,
     MAX_BACKLIGHT: RANGE,
 
-    setValue: (value) => {
+    setBacklight: (value) => {
         backlight.pwmWrite(clamp(value, 0, RANGE));
     },
 };

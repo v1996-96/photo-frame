@@ -7,6 +7,7 @@ const errorHandler = require('./middlewares/error-handler');
 const auth = require('./controllers/auth');
 const gallery = require('./controllers/gallery');
 const forismatic = require('./controllers/forismatic');
+const settings = require('./controllers/settings');
 
 // Setup express server
 let server;
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 app.use('/api/auth', auth);
 app.use('/api/gallery', gallery);
 app.use('/api/forismatic', forismatic);
+app.use('/api/settings', settings);
 app.use(errorHandler);
 
 // Start server
