@@ -20,10 +20,16 @@ const SCOPE = [
     'cloud_api:disk.info',
 ];
 
+const BACKLIGHT_CONFIG = {
+    MANUAL: 'manual',
+    AUTO: 'auto',
+};
+
 module.exports = {
     FORISMATIC_HOST,
     YANDEX_OAUTH_HOST,
     YANDEX_LOGIN_HOST,
     YANDEX_CLOUD_HOST,
     SCOPE: SCOPE.concat(' '),
+    BACKLIGHT_CONFIG,
 };

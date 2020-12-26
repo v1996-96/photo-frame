@@ -17,11 +17,10 @@
         "humps": "^2.0.1",
         "mongoose": "^5.10.17",
         "nanoid": "^3.1.18",
+        "pigpio": "^3.2.4",
+        "pigpio-mock": "0.0.1",
         "qs": "^6.9.4",
         "ramda": "^0.27.1",
-        "raspi": "^6.0.1",
-        "raspi-board": "^7.3.3",
-        "raspi-pwm": "^6.0.0",
         "shelljs": "^0.8.4"
     },
     "devDependencies": {

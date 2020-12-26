@@ -1,5 +1,4 @@
 const express = require('express');
-const { nanoid } = require('nanoid');
 const router = express.Router();
 const apiService = require('../services/yandex-api');
 const { Account } = require('../models/account');
@@ -39,7 +38,6 @@ router.post('/check', async (req, res, next) => {
 
             const newAccount = new Account({
                 ...userResponse.data,
-                accountId: nanoid(),
                 credentials: tokenResponse.data,
                 avatarUrl: `https://avatars.yandex.net/get-yapic/${userResponse.data.defaultAvatarId}/islands-retina-50`,
             });
