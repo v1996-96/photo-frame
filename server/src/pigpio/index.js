@@ -1,11 +1,12 @@
-const { Gpio } = process.env.NODE_ENV !== 'production' ? require('pigpio-mock') : require('pigpio');
+const { Gpio } = process.env.NODE_ENV !== 'production' ? require('./mock') : require('pigpio');
 const { clamp } = require('../utils');
 
 const RANGE = 1024;
 const backlight = new Gpio(18, { mode: Gpio.OUTPUT });
 
 // Set defaults
-backlight.pwmFrequency(1000).pwmRange(RANGE);
+backlight.pwmFrequency(1000);
+backlight.pwmRange(RANGE);
 
 module.exports = {
     MIN_BACKLIGHT: 0,

@@ -23,4 +23,8 @@ export const api = {
     forismatic: {
         get: () => client.get('forismatic/get'),
     },
+    settings: {
+        get: () => client.get('settings/get'),
+        set: settings => client.post('settings/set', settings),
+    },
 };

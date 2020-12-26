@@ -1,12 +1,6 @@
 <template>
-    <v-container class="pt-4">
-        <h2 class="text-h2 mb-2">Аккаунты</h2>
-
-        <p class="text-subtitle-1 mb-6">
-            Вы можете войти сразу в несколько аккаунтов для доступа к функционалу
-        </p>
-
-        <v-list v-if="isAuthorized || !authorization.userCode" outlined class="mb-4">
+    <div>
+        <v-list v-if="isAuthorized || !authorization.userCode">
             <v-list-item v-for="account in accounts" :key="account.id">
                 <v-list-item-avatar>
                     <v-avatar color="primary" size="56">
@@ -38,7 +32,7 @@
             </v-list-item>
         </v-list>
 
-        <v-card v-if="authorization.userCode" shaped>
+        <v-card v-if="authorization.userCode" elevation="0" class="mt-4">
             <v-card-title>
                 Авторизуйтесь, перейдя по ссылке
                 <v-spacer />
@@ -52,7 +46,7 @@
                 <v-btn text @click="clearCode">Отменить</v-btn>
             </v-card-actions>
         </v-card>
-    </v-container>
+    </div>
 </template>
 
 <script>

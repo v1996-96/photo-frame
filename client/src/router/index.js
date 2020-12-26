@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Settings from '@/views/Settings.vue';
 import Gallery from '@/views/Gallery.vue';
-import Auth from '@/views/Auth.vue';
 import News from '@/views/News.vue';
 import Weather from '@/views/Weather.vue';
 import Todos from '@/views/Todos.vue';
@@ -40,11 +39,6 @@ const routes = [
         path: '/settings',
         name: 'Settings',
         component: Settings,
-    },
-    {
-        path: '/auth',
-        name: 'Auth',
-        component: Auth,
     },
 ];
 

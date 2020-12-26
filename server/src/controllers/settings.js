@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { loadSettiingsLean } = require('../models/settings');
-const {} = require('../pigpio');
+const { setBacklight } = require('../pigpio');
 
 // Получить текущие настройки
-router.post('/get', async (req, res, next) => {
+router.get('/get', async (req, res, next) => {
     try {
         const settings = await loadSettiingsLean();
 

@@ -17,6 +17,7 @@ const port = process.env.PORT || 3000;
 // Setup DB connection
 mongoose.connect(process.env.MONGO_DB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB error:'));
+mongoose.set('useFindAndModify', false);
 
 // Setup express middlewares
 app.use(compression());
