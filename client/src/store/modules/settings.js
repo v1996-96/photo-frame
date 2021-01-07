@@ -9,6 +9,9 @@ const state = {
 };
 
 const getters = {
+    areSettingsLoading(state) {
+        return state.settingsDataState === dataStates.loading;
+    },
     areSettingsLoaded(state) {
         return state.settingsDataState === dataStates.loaded;
     },

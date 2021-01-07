@@ -4,7 +4,8 @@
 
         <v-main class="main">
             <router-view v-if="areAccountsLoaded && areSettingsLoaded" />
-            <v-container v-else class="pt-4">
+
+            <v-container v-if="isError" class="pt-4">
                 <v-alert prominent type="error">
                     <v-row align="center">
                         <v-col class="grow">
@@ -29,8 +30,14 @@ export default {
     name: 'App',
     components: { Navigation },
     computed: {
-        ...authHelpers.mapGetters(['areAccountsLoaded']),
-        ...settingsHelpers.mapGetters(['areSettingsLoaded']),
+        ...authHelpers.mapGetters(['areAccountsLoaded', 'areAccountsLoading']),
+        ...settingsHelpers.mapGetters(['areSettingsLoaded', 'areSettingsLoading']),
+        isError() {
+            return (
+                (!this.areAccountsLoaded && !this.areAccountsLoading) ||
+                (!this.areSettingsLoaded && !this.areSettingsLoading)
+            );
+        },
     },
     methods: {
         ...authHelpers.mapActions(['loadAccounts']),
@@ -49,8 +56,7 @@ export default {
 <style scoped>
 .main {
     background-image: url(./assets/sunrise.jpg);
-    background-size: cover;
-    max-height: 100vh;
-    overflow-y: auto;
+    background-size: 100%;
+    background-attachment: fixed;
 }
 </style>

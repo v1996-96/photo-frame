@@ -18,6 +18,9 @@ const getters = {
     isAuthorized(state) {
         return Boolean(state.accounts.length);
     },
+    areAccountsLoading(state) {
+        return state.accountsDataState === dataStates.loading;
+    },
     areAccountsLoaded(state) {
         return state.accountsDataState === dataStates.loaded;
     },
