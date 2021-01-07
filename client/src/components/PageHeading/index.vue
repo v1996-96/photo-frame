@@ -1,7 +1,7 @@
 <template>
     <v-row class="mb-8" align="center">
         <v-col class="grow">
-            <h2 class="text-h2 heading">{{ message }}</h2>
+            <h2 class="text-h2 font-weight-bold heading">{{ message }}</h2>
         </v-col>
         <v-col class="shrink">
             <slot />
@@ -20,6 +20,9 @@ export default {
 
 <style scoped>
 .heading {
-    text-shadow: 1px 1px 2px black;
+    display: inline-block;
+    color: #fcedd8;
+    font-family: 'Niconne', cursive;
+    text-shadow: 5px 5px 0px #eb452b;
 }
 </style>
