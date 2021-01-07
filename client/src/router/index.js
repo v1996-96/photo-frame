@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '@/views/Home.vue';
-import Settings from '@/views/Settings.vue';
-import Gallery from '@/views/Gallery.vue';
-import News from '@/views/News.vue';
-import Weather from '@/views/Weather.vue';
-import Todos from '@/views/Todos.vue';
+import Home from '@/views/Home';
+import Settings from '@/views/Settings';
+import Gallery from '@/views/Gallery';
+import News from '@/views/News';
+import Weather from '@/views/Weather';
+import Todos from '@/views/Todos';
 
 Vue.use(VueRouter);
 
