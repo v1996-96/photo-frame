@@ -1,8 +1,12 @@
 <template>
     <v-container class="pt-4">
-        <h2 class="text-h2 mb-10">Настройки</h2>
+        <page-heading message="Настройки" />
 
-        <backlight />
+        <v-card>
+            <v-card-text class="mb-4">
+                <backlight />
+            </v-card-text>
+        </v-card>
 
         <v-expansion-panels>
             <v-expansion-panel>
@@ -20,9 +24,10 @@
 <script>
 import Backlight from '@/components/Backlight';
 import Accounts from '@/components/Accounts';
+import PageHeading from '@/components/PageHeading';
 
 export default {
     name: 'Settings',
-    components: { Accounts, Backlight },
+    components: { Accounts, Backlight, PageHeading },
 };
 </script>

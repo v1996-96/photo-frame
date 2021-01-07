@@ -1,11 +1,14 @@
 <template>
     <v-container class="pt-4">
-        <h2 class="text-h2 mb-10">Новости</h2>
+        <page-heading message="Новости" />
     </v-container>
 </template>
 
 <script>
+import PageHeading from '@/components/PageHeading';
+
 export default {
     name: 'News',
+    components: { PageHeading },
 };
 </script>

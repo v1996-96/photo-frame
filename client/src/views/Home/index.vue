@@ -1,6 +1,8 @@
 <template>
     <v-container class="pt-4">
-        <h2 class="text-h2 mb-10">{{ welcomeMsg }}</h2>
+        <page-heading :message="welcomeMsg">
+            <v-img contain max-height="60" max-width="60" :src="parrotLink" />
+        </page-heading>
 
         <v-card v-if="Boolean(quote)" @click="loadQuote">
             <v-card-text>
@@ -14,11 +16,14 @@
 <script>
 import { api } from '@/api';
 import { getWelcomeMsg } from '@/utils/date';
+import PageHeading from '@/components/PageHeading';
 
 export default {
     name: 'Home',
+    components: { PageHeading },
     data: () => ({
         quote: null,
+        parrotLink: null,
     }),
     computed: {
         welcomeMsg() {
@@ -30,9 +35,14 @@ export default {
             const response = await api.forismatic.get();
             this.quote = response.data?.result;
         },
+        async loadParty() {
+            const response = await api.party.get();
+            this.parrotLink = response.data?.result?.parrotLink;
+        },
     },
     created() {
         this.loadQuote();
+        this.loadParty();
     },
 };
 </script>

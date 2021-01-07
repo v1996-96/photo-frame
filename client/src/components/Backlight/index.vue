@@ -1,12 +1,14 @@
 <template>
     <v-slider
-        label="Яркость"
+        hide-details
+        :label="`Яркость ${percentage}`"
         :value="backlightValue"
         :min="200"
         :max="1000"
         :step="10"
         @change="handleChangeBacklight"
-    />
+    >
+    </v-slider>
 </template>
 
 <script>
@@ -18,8 +20,10 @@ export default {
     computed: {
         ...settingsHelpers.mapState(['settings']),
         backlightValue() {
-            console.log(this.settings);
-            return this.settings?.backlight?.value || 100;
+            return this.settings?.backlight?.value || 1000;
+        },
+        percentage() {
+            return `${Math.ceil(((this.backlightValue - 200) / 800) * 100)}%`;
         },
     },
     methods: {

@@ -1,6 +1,6 @@
 <template>
     <v-container class="pt-4">
-        <h2 class="text-h2 mb-10">Галерея</h2>
+        <page-heading message="Галерея" />
 
         <div class="mb-10">
             <v-btn color="accent" x-large class="mr-4" @click="showCarousel = !showCarousel">
@@ -24,10 +24,11 @@ import { helpers as authHelpers } from '@/store/modules/auth';
 import GallerySettings from '@/components/GallerySettings';
 import GalleryCarousel from '@/components/GalleryCarousel';
 import ImagesList from '@/components/ImagesList';
+import PageHeading from '@/components/PageHeading';
 
 export default {
     name: 'Gallery',
-    components: { GallerySettings, GalleryCarousel, ImagesList },
+    components: { GallerySettings, GalleryCarousel, ImagesList, PageHeading },
     data: () => ({
         showSettings: false,
         showCarousel: false,
